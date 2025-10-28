@@ -312,7 +312,7 @@
         }
 
         function createBorderBox(content) {
-            var lines = content.split('\\n');
+            var lines = content.split('\n');
             var maxLength = 0;
             for (var i = 0; i < lines.length; i++) {
                 if (lines[i].length > maxLength) {
@@ -320,9 +320,9 @@
                 }
             }
             var border = '+' + '-'.repeat(maxLength + 2) + '+';
-            var result = border + '\\n';
+            var result = border + '\n';
             for (var i = 0; i < lines.length; i++) {
-                result += '| ' + lines[i].padEnd(maxLength) + ' |\\n';
+                result += '| ' + lines[i].padEnd(maxLength) + ' |\n';
             }
             result += border;
             return result;
@@ -355,28 +355,28 @@
             }
 
             // Build README content
-            var readme = currentAsciiArt + '\\n\\n';
+            var readme = currentAsciiArt + '\n\n';
 
             // Main section with border
-            var mainContent = 'Title: ' + title + '\\nDescription: ' + description + '\\nVersion: ' + version;
-            readme += createBorderBox(mainContent) + '\\n\\n';
+            var mainContent = 'Title: ' + title + '\nDescription: ' + description + '\nVersion: ' + version;
+            readme += createBorderBox(mainContent) + '\n\n';
 
             // Release notes section
             if (releaseNotes.length > 0) {
-                readme += '## Release Notes\\n\\n';
-                readme += releaseNotes.join('\\n') + '\\n\\n';
+                readme += '## Release Notes\n\n';
+                readme += releaseNotes.join('\n') + '\n\n';
             }
 
             // Credits section
             if (developers.length > 0) {
-                readme += '## Credits\\n\\n';
-                readme += developers.join('\\n') + '\\n\\n';
+                readme += '## Credits\n\n';
+                readme += developers.join('\n') + '\n\n';
             }
 
             // Additional thanks section
             if (additionalThanks.trim()) {
-                readme += '## Additional Thanks\\n\\n';
-                readme += additionalThanks.trim() + '\\n';
+                readme += '## Additional Thanks\n\n';
+                readme += additionalThanks.trim() + '\n';
             }
 
             // Display generated README
