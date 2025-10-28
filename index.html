@@ -5,194 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>README Generator</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: 'Courier New', monospace;
             background: #0a0a0a;
             color: #e0e0e0;
-            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
-
         .container {
             display: flex;
-            height: 100vh;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
-
         .input-section {
             flex: 1;
-            padding: 20px;
-            background: #111;
-            border-right: 1px solid #333;
-            overflow-y: auto;
             max-width: 500px;
         }
-
         .output-section {
             flex: 1;
-            padding: 20px;
-            background: #0a0a0a;
-            overflow-y: auto;
         }
-
-        h1 {
-            color: #fff;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            text-align: center;
-        }
-
-        h3 {
-            color: #fff;
-            font-size: 1rem;
-            margin-bottom: 10px;
-        }
-
         .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #999;
-            font-size: 0.9rem;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 10px;
-            background: #222;
-            border: 1px solid #444;
-            color: #e0e0e0;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #666;
-            background: #2a2a2a;
-        }
-
-        .form-group select {
-            cursor: pointer;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .release-notes-section,
-        .credits-section {
-            margin-bottom: 20px;
-        }
-
-        .release-note-item,
-        .developer-item {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-
-        .release-note-item input,
-        .developer-item input {
-            flex: 1;
-        }
-
-        button {
-            padding: 8px 12px;
-            background: #222;
-            color: #ccc;
-            border: 1px solid #444;
-            cursor: pointer;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-        }
-
-        button:hover {
-            background: #333;
-            border-color: #555;
-            color: #fff;
-        }
-
-        .remove-btn {
-            background: #1a1a1a;
-            border-color: #444;
-            color: #666;
-        }
-
-        .remove-btn:hover {
-            background: #2a0a0a;
-            border-color: #600;
-            color: #ff6666;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        #generateReadme,
-        #copyToClipboard {
-            flex: 1;
-            background: #1a1a1a;
-            border-color: #444;
-            color: #ccc;
-        }
-
-        #generateReadme:hover {
-            background: #0a2a0a;
-            border-color: #060;
-            color: #66ff66;
-        }
-
-        #copyToClipboard:hover {
-            background: #2a0a0a;
-            border-color: #600;
-            color: #ff6666;
-        }
-
-        .output-section h3 {
             margin-bottom: 15px;
-            color: #999;
         }
-
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ccc;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            background: #222;
+            border: 1px solid #444;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+        }
+        button {
+            padding: 8px 15px;
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #444;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
         #readmeOutput {
             background: #111;
-            color: #ccc;
-            padding: 20px;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            line-height: 1.4;
-            white-space: pre-wrap;
-            word-wrap: break-word;
+            color: #fff;
+            padding: 15px;
             border: 1px solid #333;
-            height: calc(100vh - 60px);
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            height: 80vh;
             overflow-y: auto;
         }
-
-        @media (max-width: 800px) {
-            .container {
-                flex-direction: column;
-            }
-            
-            .input-section {
-                max-width: none;
-                border-right: none;
-                border-bottom: 1px solid #333;
-            }
+        .item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+        .item input {
+            flex: 1;
         }
     </style>
 </head>
@@ -201,449 +80,212 @@
         <div class="input-section">
             <h1>README Generator</h1>
             
-            <div class="form-group">
-                <label for="asciiArt">ASCII Art:</label>
-                <select id="asciiArt">
-                    <option value="">Loading...</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" id="title" placeholder="Enter project title">
-            </div>
-
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea id="description" placeholder="Enter project description" rows="4"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="version">Version:</label>
-                <input type="text" id="version" placeholder="1.0.0">
-            </div>
-
-            <div class="release-notes-section">
-                <div class="section-header">
-                    <h3>Release Notes</h3>
-                    <button type="button" id="addReleaseNote">Add</button>
+            <div class="section">
+                <div class="form-group">
+                    <label for="asciiArt">ASCII Art:</label>
+                    <select id="asciiArt">
+                        <option value="">Loading...</option>
+                    </select>
                 </div>
-                <div id="releaseNotes">
-                    <div class="release-note-item">
-                        <input type="text" placeholder="Release note" class="release-note-input">
-                        <button type="button" class="remove-btn">Remove</button>
+
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" placeholder="Enter project title">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" placeholder="Enter project description" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="version">Version:</label>
+                    <input type="text" id="version" placeholder="1.0.0">
+                </div>
+
+                <div class="form-group">
+                    <label>Release Notes:</label>
+                    <div id="releaseNotes">
+                        <div class="item">
+                            <input type="text" class="release-note-input" placeholder="Release note">
+                            <button onclick="removeItem(this)">Remove</button>
+                        </div>
                     </div>
+                    <button onclick="addReleaseNote()">Add Note</button>
                 </div>
-            </div>
 
-            <div class="credits-section">
-                <div class="section-header">
-                    <h3>Credits</h3>
-                    <button type="button" id="addDeveloper">Add</button>
-                </div>
-                <div id="developers">
-                    <div class="developer-item">
-                        <input type="text" placeholder="Developer name" class="developer-name" value="dogenado">
-                        <button type="button" class="remove-btn">Remove</button>
+                <div class="form-group">
+                    <label>Credits:</label>
+                    <div id="developers">
+                        <div class="item">
+                            <input type="text" class="developer-name" placeholder="Developer name" value="dogenado">
+                            <button onclick="removeItem(this)">Remove</button>
+                        </div>
                     </div>
+                    <button onclick="addDeveloper()">Add Developer</button>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="additionalThanks">Additional Thanks:</label>
-                <textarea id="additionalThanks" placeholder="Enter additional thanks" rows="3"></textarea>
-            </div>
+                <div class="form-group">
+                    <label for="additionalThanks">Additional Thanks:</label>
+                    <textarea id="additionalThanks" placeholder="Enter additional thanks" rows="3"></textarea>
+                </div>
 
-            <div class="button-group">
-                <button id="generateReadme">Generate</button>
-                <button id="copyToClipboard">Copy</button>
+                <button onclick="generateReadme()">Generate README</button>
+                <button onclick="copyToClipboard()">Copy to Clipboard</button>
             </div>
         </div>
 
         <div class="output-section">
-            <h3>Output</h3>
-            <pre id="readmeOutput"></pre>
+            <h2>Generated README</h2>
+            <div id="readmeOutput"></div>
         </div>
     </div>
 
     <script>
-        // ASCII art data
-        const ASCII_ART_OPTIONS = {
-            'Ascii dogenado': `                  @                    @%            
-                 @@@@                 @@@            
-                :@@@@@@@            :@@@@            
-                %@@@@@@@@@:+@@+         @@           
-                *@@@@@@@@@@@@@   @@@@@       @.      
-                 @@@@@@@@@@@@@@@@@@@@@        @@     
-                 @@@@@@@.   @@@@   @@@@        @@    
-         @@@@@@@@@@@@@    @@@@      =@@.  @@@   @=   
-       @@@@@@@@@@@@@      #*@.:@@@        :@@    @%  
-      :@@@@@@@@@@@@@         -@@@@ @              @  
-      @@@@@@@@@@@@:            . .                @@ 
-     @@@@@@@@@@@@@                       .@@@@@@  #@ 
-    @@@@@@@@@@@@@@                       @@@@@@@:  @ 
-   .@@@@@@@@@@@@@@@                       @@@@@@   @#
-   #@@@@@@@@@@@@@@@@                      @@@@@.   @=
-   @@@@@@@@@  .@@@@@@.             @@@@%@@@@@@@@  @@ 
-  @@@@@@@@@@@   @@@@@@@               @@@@@@@@   .@= 
-@@@@@@@@@@@@@@    @@@@@@@                        @:  
-@@@@@@@@@@@@@@@     @@@@@@@    @@             %@@    
-@@@@@@@@ :@@@@@@@     @@@@@@@.    @@@@.   .@@@@@@    
--@@@@@@@   @@@@@@@@      @@@@@@@    .@@@@@@@@@@@@@   
- @@@@@@@@    @@@@@@@@.      @@@@@@%     ..@@@@@@@@   
-  @@@@@@@@@      @@@@@@@@@.     @@@@@@@               
- @@@@@@@@@@@       @@@@@@@@@@.     @@@@@@@.          
-@@@@@@@@@@@@@@              @@@@@@     .@@@@@@@      
-@@@@@@  @@@@@@@                               @@@@@@%
- @@@@@.   @@@@@:    @@@@@@@.                         
-  .@@@@#      @@@@     %@@@@@@                       
-    @@@@@@         @@@                               
-     @@@@@@@@@+                                      
-     @@@@.@@@@@                                      
-      @@@@.  -@@@@@.                                 
-        @@@@@                                        
-          @@@@@@@.                                   
-            .@@@@@@@@@                               
-                :@@@@-                               
-                   @@@@                              
-                 @@@@                                
-                  @@@@                               
-                   @@@                               
-                 @@@                                 `,
-            'Printer': `                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                          -##############################################-                          
-                          +.                                            .=                          
-                            +.  :-     .         #=.             .-: ..+                            
-                            *.  :-               --#.             -:  .*                            
-                            *.  :-               .+.+             -:  .+                            
-                            *.  :-          .*@@@@%@@@@:          -:  .+                            
-                            *.  :-          =++.-+#=.#.#          -:  .+                            
-                            *.  :#**********#+.-.=*-.::%*********+*:  .+                            
-                            *.  :*==========*+.::+=:-=:%==========*:  .+                            
-                            *.  :-          =+.:+:.-=..#          -:  .+                            
-                            *.  :-          =%++++++++**          =:  .+                            
-                            *.  :-             =...:+  .          =:  .+                            
-                            *.  :-            ..*..=:.            =:  .+                            
-                            *.  :-             ..%@..             =:  .+                            
-                            *.  :-                                =:  .+                            
-                            *.  :-                                =:  .+                            
-                            *.  :-                                =:  .+                            
-                            *.  :-                                =:  .+                            
-                            *.  :-                                =:  .+                            
-                            *.  :-                                =:  .+                            
-                            *.  :-*%%%@@@@@@@@@@@@@@@@@@@@@%%%%%#==:  .+                            
-                            *.  --#.                       .    .+=:  .+                            
-                            *.  ---===*+%==================*+@=--.=:  .+                            
-                            *:::==::::=-%::::::::::::::::::+-@::::=-:::+                            
-                          .*.      .*.                  ..    .*       .#.                          
-                          @.       .*  =:.           -. %..%: .#        .%                          
-                         =-        .#. =-............=..#+-@. .#         =-.                        
-                        .@         .*                         .#          @.                        
-                        -#####################################*#***********-                        
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                                                                 `,
-            'Revolver': `      .____.
-   xuuu\`\`\$$$uuu.
- . \$\`\`\$  $$$\`$$$
-dP*$  $  $$$ $$$
-?k $  $  $$$ $$$
- $ $  $  $$$ $$$
- ":$  $  $$$ $$$
-  N$  $  $$$ $$$
-  $$  $  $$$ $$$
-   $  $  $$$ $$$
-   $  $  $$$ $$$
-   $  $  $$$ $$$
-   $  $  $$$ $$$
-   $  $  $$$ $$$
-   $$#$  $$$ $$$
-   $$'$  $$$ $$$
-   $$\`R  $$$ $$$
-   $$$&  $$$ $$$
-   $#*$  $$$ $$$
-   $  $  $$$ @$$
-   $  $  $$$ $$$
-   $  $  $$$ $$$
-   $  $  $B$ $$&.
-   $  $  $D$ $$$$$muL.
-   $  $  $Q$ $$$$$  \`"**mu..
-   $  $  $R$ $$$$$    k  \`$$*t
-   $  @  $$$ $$$$$    k   $$!4
-   $ x$uu@B8u$NB@$uuuu6...$$X?
-   $ $(\`RF\`$`````\`R$ $$5\`"""#"R
-   $ $" M$ $     $$ $$$      ?
-   $ $  ?$ $     T$ $$$      $
-   $ $F H$ $     M$ $$K      $  ..
-   $ $L $$ $     $$ $$R.     "d$$$$Ns.
-   $ $~ $$ $     N$ $$X      ."    "%2h
-   $ 4k f  $     *$ $$&      R       "iN
-   $ $$ %uz!     tuuR$$:     Buu      ?\`:
-   $ $F          $??$8B      | '*Ned*$~L$
-   $ $k          $'@$$$      |$.suu+!' !$
-   $ ?N          $'$$@$      $*\`      d:"
-   $ dL..........M.$&$$      5       d"P
- ..$.^"*I$RR*$C""??77*?      "nu...n*L*
-'$C"R   \`\`\`""!$*@#""\` .uor    bu8BUU+!\`
-'*@m@.       *d"     *$Rouxxd"\`\`\`$
-     R*@mu.           "#$R *$    !
-     *%x. "*L               $     %.
-        "N  \`%.      ...u.d!\` ..ue$$$o..
-         @    ".    $*"""" .u$$$$$$$$$$$$beu...
-        8  .mL %  :R\`     x$$$$$$$$$$$$$$$$$$$$$$$$$$WmeemeeWc
-       |$e!" "s:k 4      d$N"\`"#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
-       $$      "N @      $?$    F$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
-       $@       ^%Uu..   R#8buu$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
-                  \`\`\`""*u$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$**`
-                         #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
-                          "5$$$$$$$$$$$$$$$$$$$$$$$$$$$$%>
-                            \`*$$$$$$$$$$$$$$$$$$$$$$$$****>
-                              ^#$$$$$$$$$$$$$$$$$$$$$>
-                                 "*$$$$$$$$$$$$$$$$$$>
-                                   \`"*$$$$$$$$$$$$$$>
-                                       ^!$$$$$$$$$$$>
-                                           \`"#+$$$$$$>
-                                                 """**$$>
-                                                        \`\`\``
+        // ASCII art data - properly escaped
+        var ASCII_ART_OPTIONS = {
+            'Ascii dogenado': '                  @                    @%            \n                 @@@@                 @@@            \n                :@@@@@@@            :@@@@            \n                %@@@@@@@@@:+@@@         @@           \n                *@@@@@@@@@@@@@   @@@@@       @.      \n                 @@@@@@@@@@@@@@@@@@@@@        @@     \n                 @@@@@@@.   @@@@   @@@@        @@    \n         @@@@@@@@@@@@@    @@@@      =@@.  @@@   @=   \n       @@@@@@@@@@@@@      #*@.:@@@        :@@    @%  \n      :@@@@@@@@@@@@@         -@@@@ @              @  \n      @@@@@@@@@@@@:            . .                @@ \n     @@@@@@@@@@@@@                       .@@@@@@  #@ \n    @@@@@@@@@@@@@@                       @@@@@@@:  @ \n   .@@@@@@@@@@@@@@@                       @@@@@@   @#\n   #@@@@@@@@@@@@@@@@                      @@@@@.   @=\n   @@@@@@@@@  .@@@@@@.             @@@@%@@@@@@@@  @@ \n  @@@@@@@@@@@   @@@@@@@               @@@@@@@@   .@= \n@@@@@@@@@@@@@@    @@@@@@@                        @:  \n@@@@@@@@@@@@@@@     @@@@@@@    @@             %@@    \n@@@@@@@@ :@@@@@@@     @@@@@@@.    @@@@.   .@@@@@@    \n-@@@@@@@   @@@@@@@@      @@@@@@@    .@@@@@@@@@@@@@   \n @@@@@@@@    @@@@@@@@.      @@@@@@%     ..@@@@@@@@   \n  @@@@@@@@@      @@@@@@@@@.     @@@@@@@               \n @@@@@@@@@@@       @@@@@@@@@@.     @@@@@@@.          \n@@@@@@@@@@@@@@              @@@@@@     .@@@@@@@      \n@@@@@@  @@@@@@@                               @@@@@@%\n @@@@@.   @@@@@:    @@@@@@@.                         \n  .@@@@#      @@@@     %@@@@@@                       \n    @@@@@@         @@@                               \n     @@@@@@@@@+                                      \n     @@@@.@@@@@                                      \n      @@@@.  -@@@@@.                                  \n        @@@@@                                        \n          @@@@@@@.                                   \n            .@@@@@@@@@                              \n                :@@@@-                              \n                   @@@@                             \n                 @@@@                               \n                  @@@@                              \n                   @@@                              \n                 @@@                                ',
+            'Printer': '                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                          -##############################################-                           \n                          +.                                            .=                           \n                            +.  :-     .         #=.             .-: ..+                            \n                            *.  :-               --#.             -:  .*                            \n                            *.  :-               .+.+             -:  .+                            \n                            *.  :-          .*@@@@@@@@:          -:  .+                            \n                            *.  :-          =++.-+#=.#.#          -:  .+                            \n                            *.  :#**********#+.-.=*-.::%*********+*:  .+                            \n                            *.  :*==========*+.::+=:-=:%==========*:  .+                            \n                            *.  :-          =+.:+:.-=..#          -:  .+                            \n                            *.  :-          =%++++++++**          =:  .+                            \n                            *.  :-             =...:+  .          =:  .+                            \n                            *.  :-            ..*..=:.            =:  .+                            \n                            *.  :-             ..%@..             =:  .+                            \n                            *.  :-                                =:  .+                            \n                            *.  :-                                =:  .+                            \n                            *.  :-                                =:  .+                            \n                            *.  :-                                =:  .+                            \n                            *.  :-                                =:  .+                            \n                            *.  :-                                =:  .+                            \n                            *.  :-*%%%@@@@@@@@@@@@@@@@@@@@@%%%%%#==:  .+                            \n                            *.  --#.                       .    .+=:  .+                            \n                            *.  ---===*+%==================*+@=--.=:  .+                            \n                            *:::==::::=-%::::::::::::::::::+-@::::=-:::+                            \n                          .*.      .*.                  ..    .*       .#.                           \n                          @.       .*  =:.           -. %..%: .#        .%                           \n                         =-        .#. =-............=..#+-@. .#         =-.                         \n                        .@         .*                         .#          @.                         \n                        -#####################################*#***********-                         \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   \n                                                                                                   ',
+            'Revolver': '      .____.                                       \n   xuuu```$$$uuu.                                      \n . $``$  $$$`$$$                                      \ndP*$  $  $$$ $$$                                      \n?k $  $  $$$ $$$                                      \n $ $  $  $$$ $$$                                      \n ":$  $  $$$ $$$                                      \n  N$  $  $$$ $$$                                      \n  $$  $  $$$ $$$                                      \n   $  $  $$$ $$$                                      \n   $  $  $$$ $$$                                      \n   $  $  $$$ $$$                                      \n   $  $  $$$ $$$                                      \n   $  $  $$$ $$$                                      \n   $$#$  $$$ $$$                                      \n   $$\'$  $$$ $$$                                      \n   $$`R  $$$ $$$                                      \n   $$$&  $$$ $$$                                      \n   $#*$  $$$ $$$                                      \n   $  $  $$$ @$$                                      \n   $  $  $$$ $$$                                      \n   $  $  $$$ $$$                                      \n   $  $  $B$ $$&.                                     \n   $  $  $D$ $$$$$muL.                                 \n   $  $  $Q$ $$$$$  `"**mu..                           \n   $  $  $R$ $$$$$    k  `$$*t                           \n   $  @  $$$ $$$$$    k   $$!4                           \n   $ x$uu@B8u$NB@$uuuu6...$$X?                           \n   $ $(`RF`$`````R$ $$5`"""#"R                           \n   $ $" M$ $     $$ $$$      ?                           \n   $ $  ?$ $     T$ $$$      $                           \n   $ $F H$ $     M$ $$K      $  ..                       \n   $ $L $$ $     $$ $$R.     "d$$$$Ns.                   \n   $ $~ $$ $     N$ $$X      ."    "%2h                   \n   $ 4k f  $     *$ $$&      R       "iN                   \n   $ $$ %uz!     tuuR$$:     Buu      ?`:                   \n   $ $F          $??$8B      | \'*Ned*$~L$                   \n   $ $k          $\'@$$$      |$.suu+!\' !$                   \n   $ ?N          $\'$$@$      $*`      d:"                  \n   $ dL..........M.$&$$      5       d"P                  \n ..$.^"*I$RR*$C""??77*?      "nu...n*L*                  \n\'$C"R   ```""!$*@#""` .uor    bu8BUU+!`                  \n\'*@m@.       *d"     *$Rouxxd"`` `$                  \n     R*@mu.           "#$R *$    !                       \n     *%x. "*L               $     %.                       \n        "N  `%.      ...u.d!` ..ue$$$o..                   \n         @    ".    $*"""" .u$$$$$$$$$$$$beu...           \n        8  .mL %  :R`     x$$$$$$$$$$$$$$$$$$$$$$$$$$WmeemeeWc      \n       |$e!" "s:k 4      d$N"`"#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \n       $$      "N @      $?$    F$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \n       $@       ^%Uu..   R#8buu$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \n                  ```""*u$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \n                         #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \n                          "5$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \n                            `*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \n                              ^#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \n                                 "*$$$$$$$$$$$$$$$$$$$$$$$$$$>     \n                                   `"*$$$$$$$$$$$$$$$$$$$$$$$>     \n                                       ^!$$$$$$$$$$$$$$$$$$$$>     \n                                           `"#+$$$$$$$$$$$$$$>     \n                                                 """**$$$$$$$$>     \n                                                        ```""      '
         };
 
-        let currentAsciiArt = '';
+        var currentAsciiArt = '';
 
-        // Initialize the application
+        // Initialize the app
         function initApp() {
-            console.log('Initializing app...');
-            
-            // Populate ASCII art dropdown
             populateAsciiDropdown();
-            
-            // Set up event listeners
             setupEventListeners();
-            
-            // Generate initial README
             generateReadme();
         }
 
-        // Populate ASCII art dropdown with Ascii dogenado as default
+        // Populate ASCII art dropdown
         function populateAsciiDropdown() {
-            const select = document.getElementById('asciiArt');
-            if (!select) {
-                console.error('ASCII art select element not found');
-                return;
-            }
+            var select = document.getElementById('asciiArt');
+            if (!select) return;
             
             select.innerHTML = '';
             
-            // Order: Ascii dogenado first, then alphabetically for others
-            const options = Object.keys(ASCII_ART_OPTIONS);
-            options.sort((a, b) => {
-                if (a === 'Ascii dogenado') return -1;
-                if (b === 'Ascii dogenado') return 1;
-                return a.localeCompare(b);
-            });
+            // Options: Ascii dogenado first, then others
+            var options = ['Ascii dogenado', 'Printer', 'Revolver'];
             
-            options.forEach(name => {
-                const option = document.createElement('option');
-                option.value = name;
-                option.textContent = name;
+            for (var i = 0; i < options.length; i++) {
+                var option = document.createElement('option');
+                option.value = options[i];
+                option.textContent = options[i];
                 select.appendChild(option);
-            });
-            
-            // Select the first option (Ascii dogenado) by default
-            if (options.length > 0) {
-                select.value = options[0];
-                currentAsciiArt = ASCII_ART_OPTIONS[options[0]];
-                console.log('Selected default ASCII art:', options[0]);
             }
+            
+            // Select Ascii dogenado by default
+            select.value = 'Ascii dogenado';
+            currentAsciiArt = ASCII_ART_OPTIONS['Ascii dogenado'];
         }
 
-        // Set up all event listeners
+        // Set up event listeners
         function setupEventListeners() {
-            console.log('Setting up event listeners...');
-            
-            // ASCII art change handler
-            const asciiSelect = document.getElementById('asciiArt');
+            // ASCII art change
+            var asciiSelect = document.getElementById('asciiArt');
             if (asciiSelect) {
                 asciiSelect.addEventListener('change', function() {
                     currentAsciiArt = ASCII_ART_OPTIONS[this.value];
-                    console.log('Changed ASCII art to:', this.value);
                     generateReadme();
-                });
-            }
-
-            // Add release note line
-            const addReleaseNoteBtn = document.getElementById('addReleaseNote');
-            if (addReleaseNoteBtn) {
-                addReleaseNoteBtn.addEventListener('click', function() {
-                    const releaseNotesDiv = document.getElementById('releaseNotes');
-                    if (releaseNotesDiv) {
-                        const noteItem = document.createElement('div');
-                        noteItem.className = 'release-note-item';
-                        noteItem.innerHTML = `
-                            <input type="text" placeholder="Release note" class="release-note-input">
-                            <button type="button" class="remove-btn">Remove</button>
-                        `;
-                        releaseNotesDiv.appendChild(noteItem);
-                        attachRemoveNoteListener(noteItem.querySelector('.remove-btn'));
-                        generateReadme();
-                    }
-                });
-            }
-
-            // Add developer
-            const addDeveloperBtn = document.getElementById('addDeveloper');
-            if (addDeveloperBtn) {
-                addDeveloperBtn.addEventListener('click', function() {
-                    const developersDiv = document.getElementById('developers');
-                    if (developersDiv) {
-                        const developerItem = document.createElement('div');
-                        developerItem.className = 'developer-item';
-                        developerItem.innerHTML = `
-                            <input type="text" placeholder="Developer name" class="developer-name">
-                            <button type="button" class="remove-btn">Remove</button>
-                        `;
-                        developersDiv.appendChild(developerItem);
-                        attachRemoveDeveloperListener(developerItem.querySelector('.remove-btn'));
-                        generateReadme();
-                    }
-                });
-            }
-
-            // Attach remove listeners to existing elements
-            document.querySelectorAll('.remove-btn').forEach(button => {
-                const item = button.closest('.release-note-item, .developer-item');
-                if (item && item.classList.contains('release-note-item')) {
-                    attachRemoveNoteListener(button);
-                } else {
-                    attachRemoveDeveloperListener(button);
-                }
-            });
-
-            // Generate README
-            const generateBtn = document.getElementById('generateReadme');
-            if (generateBtn) {
-                generateBtn.addEventListener('click', generateReadme);
-            }
-
-            // Copy to clipboard
-            const copyBtn = document.getElementById('copyToClipboard');
-            const readmeOutput = document.getElementById('readmeOutput');
-            if (copyBtn && readmeOutput) {
-                copyBtn.addEventListener('click', function() {
-                    const text = readmeOutput.textContent;
-                    navigator.clipboard.writeText(text).then(() => {
-                        copyBtn.textContent = 'Copied!';
-                        setTimeout(() => {
-                            copyBtn.textContent = 'Copy';
-                        }, 2000);
-                    });
                 });
             }
 
             // Auto-generate on input change
-            ['title', 'description', 'version', 'additionalThanks'].forEach(id => {
-                const element = document.getElementById(id);
+            var inputs = ['title', 'description', 'version', 'additionalThanks'];
+            for (var i = 0; i < inputs.length; i++) {
+                var element = document.getElementById(inputs[i]);
                 if (element) {
                     element.addEventListener('input', generateReadme);
                 }
-            });
+            }
         }
 
-        function attachRemoveNoteListener(button) {
-            button.addEventListener('click', function() {
-                const releaseNotesDiv = document.getElementById('releaseNotes');
-                if (releaseNotesDiv && releaseNotesDiv.children.length > 1) {
-                    this.parentElement.remove();
-                    generateReadme();
-                }
-            });
+        function addReleaseNote() {
+            var container = document.getElementById('releaseNotes');
+            var div = document.createElement('div');
+            div.className = 'item';
+            div.innerHTML = '<input type="text" class="release-note-input" placeholder="Release note"><button onclick="removeItem(this)">Remove</button>';
+            container.appendChild(div);
+            
+            // Add event listener to new input
+            var inputs = div.getElementsByTagName('input');
+            if (inputs.length > 0) {
+                inputs[0].addEventListener('input', generateReadme);
+            }
         }
 
-        function attachRemoveDeveloperListener(button) {
-            button.addEventListener('click', function() {
-                const developersDiv = document.getElementById('developers');
-                if (developersDiv && developersDiv.children.length > 1) {
-                    this.parentElement.remove();
-                    generateReadme();
-                }
-            });
+        function addDeveloper() {
+            var container = document.getElementById('developers');
+            var div = document.createElement('div');
+            div.className = 'item';
+            div.innerHTML = '<input type="text" class="developer-name" placeholder="Developer name"><button onclick="removeItem(this)">Remove</button>';
+            container.appendChild(div);
+            
+            // Add event listener to new input
+            var inputs = div.getElementsByTagName('input');
+            if (inputs.length > 0) {
+                inputs[0].addEventListener('input', generateReadme);
+            }
+        }
+
+        function removeItem(button) {
+            var parent = button.parentElement;
+            var container = parent.parentElement;
+            if (container.children.length > 1) {
+                parent.remove();
+                generateReadme();
+            }
         }
 
         function createBorderBox(content) {
-            const lines = content.split('\n');
-            const maxLength = Math.max(...lines.map(line => line.length));
-            const border = '+' + '-'.repeat(maxLength + 2) + '+';
-            
-            const boxedLines = lines.map(line => {
-                return '| ' + line.padEnd(maxLength) + ' |';
-            });
-            
-            return [border, ...boxedLines, border].join('\n');
+            var lines = content.split('\n');
+            var maxLength = 0;
+            for (var i = 0; i < lines.length; i++) {
+                if (lines[i].length > maxLength) {
+                    maxLength = lines[i].length;
+                }
+            }
+            var border = '+' + '-'.repeat(maxLength + 2) + '+';
+            var result = border + '\n';
+            for (var i = 0; i < lines.length; i++) {
+                result += '| ' + lines[i].padEnd(maxLength) + ' |\n';
+            }
+            result += border;
+            return result;
         }
 
         function generateReadme() {
-            console.log('Generating README...');
+            if (!currentAsciiArt) return;
             
-            // Ensure we have current ASCII art
-            if (!currentAsciiArt) {
-                const asciiSelect = document.getElementById('asciiArt');
-                if (asciiSelect && asciiSelect.value) {
-                    currentAsciiArt = ASCII_ART_OPTIONS[asciiSelect.value];
-                }
-            }
-            
-            const title = document.getElementById('title').value || 'Project Title';
-            const description = document.getElementById('description').value || 'Project description goes here.';
-            const version = document.getElementById('version').value || '1.0.0';
-            const additionalThanks = document.getElementById('additionalThanks').value;
+            var title = document.getElementById('title').value || 'Project Title';
+            var description = document.getElementById('description').value || 'Project description goes here.';
+            var version = document.getElementById('version').value || '1.0.0';
+            var additionalThanks = document.getElementById('additionalThanks').value;
 
             // Get release notes
-            const releaseNotes = [];
-            document.querySelectorAll('.release-note-input').forEach(input => {
-                if (input.value.trim()) {
-                    releaseNotes.push(`• ${input.value.trim()}`);
+            var releaseNotes = [];
+            var noteInputs = document.getElementsByClassName('release-note-input');
+            for (var i = 0; i < noteInputs.length; i++) {
+                if (noteInputs[i].value.trim()) {
+                    releaseNotes.push('• ' + noteInputs[i].value.trim());
                 }
-            });
+            }
 
             // Get developers
-            const developers = [];
-            document.querySelectorAll('.developer-name').forEach(input => {
-                if (input.value.trim()) {
-                    developers.push(input.value.trim());
+            var developers = [];
+            var devInputs = document.getElementsByClassName('developer-name');
+            for (var i = 0; i < devInputs.length; i++) {
+                if (devInputs[i].value.trim()) {
+                    developers.push(devInputs[i].value.trim());
                 }
-            });
+            }
 
             // Build README content
-            let readme = currentAsciiArt + '\n\n';
+            var readme = currentAsciiArt + '\n\n';
 
             // Main section with border
-            const mainContent = `Title: ${title}
-Description: ${description}
-Version: ${version}`;
-            
+            var mainContent = 'Title: ' + title + '\nDescription: ' + description + '\nVersion: ' + version;
             readme += createBorderBox(mainContent) + '\n\n';
 
             // Release notes section
@@ -665,16 +307,22 @@ Version: ${version}`;
             }
 
             // Display generated README
-            const readmeOutput = document.getElementById('readmeOutput');
-            if (readmeOutput) {
-                readmeOutput.textContent = readme;
-                console.log('README generated successfully');
-            } else {
-                console.error('Readme output element not found');
+            var output = document.getElementById('readmeOutput');
+            if (output) {
+                output.textContent = readme;
             }
         }
 
-        // Initialize when DOM is loaded
+        function copyToClipboard() {
+            var output = document.getElementById('readmeOutput');
+            if (output) {
+                navigator.clipboard.writeText(output.textContent).then(function() {
+                    alert('Copied to clipboard!');
+                });
+            }
+        }
+
+        // Initialize when page loads
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initApp);
         } else {
