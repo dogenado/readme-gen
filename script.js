@@ -7,15 +7,15 @@ async function loadAsciiArtFiles() {
     const select = document.getElementById('asciiArt');
     select.innerHTML = '<option value="">Loading...</option>';
     
-    // Try to load ASCII art files from the index
+    // Start with embedded art as fallback
+    loadEmbeddedArt();
+    
+    // Try to load and override with external ASCII art files
     try {
         const indexResponse = await fetch('ascii/art-index.json');
         
         if (indexResponse.ok) {
             const asciiFiles = await indexResponse.json();
-            
-            // Clear previous cache and populate with files from index
-            asciiArtCache = {};
             
             for (const file of asciiFiles) {
                 try {
@@ -24,21 +24,22 @@ async function loadAsciiArtFiles() {
                         const art = await response.text();
                         const fileName = file.replace('.txt', '').replace(/-/g, ' ').replace(/_/g, ' ');
                         
-                        // Store in cache - this will overwrite any existing entry
+                        // Store in cache - this will override any existing embedded entry
                         asciiArtCache[fileName] = art;
+                        console.log(`Loaded external ASCII art: ${fileName}`);
                     }
                 } catch (error) {
                     console.warn(`Failed to load ${file}:`, error);
                 }
             }
+        } else {
+            console.warn('Could not load art-index.json, using embedded art only');
         }
     } catch (error) {
-        console.warn('Could not load ASCII art index:', error);
-        // Fallback to embedded art if index loading fails
-        loadEmbeddedArt();
+        console.warn('Could not load ASCII art index, using embedded art only:', error);
     }
     
-    // Populate dropdown with unique entries from cache
+    // Always populate dropdown (whether external files loaded or not)
     populateDropdown();
 }
 
@@ -85,7 +86,126 @@ function loadEmbeddedArt() {
                  @@@@                                
                   @@@@                               
                    @@@                               
-                 @@@                                 `
+                 @@@                                 `,
+        'Printer': `                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                          -##############################################-                          
+                          +.                                            .=                          
+                            +.  :-     .         #=.             .-: ..+                            
+                            *.  :-               --#.             -:  .*                            
+                            *.  :-               .+.+             -:  .+                            
+                            *.  :-          .*@@@@%@@@@:          -:  .+                            
+                            *.  :-          =++.-+#=.#.#          -:  .+                            
+                            *.  :#**********#+.-.=*-.::%*********+*:  .+                            
+                            *.  :*==========*+.::+=:-=:%==========*:  .+                            
+                            *.  :-          =+.:+:.-=..#          -:  .+                            
+                            *.  :-          =%++++++++**          =:  .+                            
+                            *.  :-             =...:+  .          =:  .+                            
+                            *.  :-            ..*..=:.            =:  .+                            
+                            *.  :-             ..%@..             =:  .+                            
+                            *.  :-                                =:  .+                            
+                            *.  :-                                =:  .+                            
+                            *.  :-                                =:  .+                            
+                            *.  :-                                =:  .+                            
+                            *.  :-                                =:  .+                            
+                            *.  :-                                =:  .+                            
+                            *.  :-*%%%@@@@@@@@@@@@@@@@@@@@@%%%%%#==:  .+                            
+                            *.  --#.                       .    .+=:  .+                            
+                            *.  ---===*+%==================*+@=--.=:  .+                            
+                            *:::==::::=-%::::::::::::::::::+-@::::=-:::+                            
+                          .*.      .*.                  ..    .*       .#.                          
+                          @.       .*  =:.           -. %..%: .#        .%                          
+                         =-        .#. =-............=..#+-@. .#         =-.                        
+                        .@         .*                         .#          @.                        
+                        -#####################################*#***********-                        
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                 `,
+        'Revolver': `      .____.
+   xuuu\`\`\$$$uuu.
+ . \$\`\`\$  $$$\`$$$
+dP*$  $  $$$ $$$
+?k $  $  $$$ $$$
+ $ $  $  $$$ $$$
+ ":$  $  $$$ $$$
+  N$  $  $$$ $$$
+  $$  $  $$$ $$$
+   $  $  $$$ $$$
+   $  $  $$$ $$$
+   $  $  $$$ $$$
+   $  $  $$$ $$$
+   $  $  $$$ $$$
+   $$#$  $$$ $$$
+   $$'$  $$$ $$$
+   $$\`R  $$$ $$$
+   $$$&  $$$ $$$
+   $#*$  $$$ $$$
+   $  $  $$$ @$$
+   $  $  $$$ $$$
+   $  $  $$$ $$$
+   $  $  $B$ $$&.
+   $  $  $D$ $$$$$muL.
+   $  $  $Q$ $$$$$  \`"**mu..
+   $  $  $R$ $$$$$    k  \`$$*t
+   $  @  $$$ $$$$$    k   $$!4
+   $ x$uu@B8u$NB@$uuuu6...$$X?
+   $ $(\`RF\`$`````\`R$ $$5\`"""#"R
+   $ $" M$ $     $$ $$$      ?
+   $ $  ?$ $     T$ $$$      $
+   $ $F H$ $     M$ $$K      $  ..
+   $ $L $$ $     $$ $$R.     "d$$$$Ns.
+   $ $~ $$ $     N$ $$X      ."    "%2h
+   $ 4k f  $     *$ $$&      R       "iN
+   $ $$ %uz!     tuuR$$:     Buu      ?\`:
+   $ $F          $??$8B      | '*Ned*$~L$
+   $ $k          $'@$$$      |$.suu+!' !$
+   $ ?N          $'$$@$      $*\`      d:"
+   $ dL..........M.$&$$      5       d"P
+ ..$.^"*I$RR*$C""??77*?      "nu...n*L*
+'$C"R   \`\`\`""!$*@#""\` .uor    bu8BUU+!\`
+'*@m@.       *d"     *$Rouxxd"\`\`\`$
+     R*@mu.           "#$R *$    !
+     *%x. "*L               $     %.
+        "N  \`%.      ...u.d!\` ..ue$$$o..
+         @    ".    $*"""" .u$$$$$$$$$$$$beu...
+        8  .mL %  :R\`     x$$$$$$$$$$$$$$$$$$$$$$$$$$WmeemeeWc
+       |$e!" "s:k 4      d$N"\`"#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
+       $$      "N @      $?$    F$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
+       $@       ^%Uu..   R#8buu$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
+                  \`\`\`""*u$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
+                         #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
+                          "5$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
+                            \`*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
+                              ^#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
+                                 "*$$$$$$$$$$$$$$$$$$$$$$$$$$>
+                                   \`"*$$$$$$$$$$$$$$$$$$$$$$$>
+                                       ^!$$$$$$$$$$$$$$$$$$$$>
+                                           \`"#+$$$$$$$$$$$$$$>
+                                                 """**$$$$$$$$>
+                                                        \`\`\``
     };
 }
 
