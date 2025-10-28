@@ -73,6 +73,21 @@
         .item input {
             flex: 1;
         }
+        .loading-status {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .error-message {
+            color: #ff6666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .success-message {
+            color: #66ff66;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -83,6 +98,7 @@
             <div class="section">
                 <div class="form-group">
                     <label for="asciiArt">ASCII Art:</label>
+                    <div id="asciiArtStatus" class="loading-status">Loading ASCII art files...</div>
                     <select id="asciiArt">
                         <option value="">Loading...</option>
                     </select>
@@ -142,31 +158,84 @@
     </div>
 
     <script>
-        // ASCII art data - properly escaped
-        var ASCII_ART_OPTIONS = {
-            'Ascii dogenado': '                  @                    @%            \\n                 @@@@                 @@@            \\n                :@@@@@@@            :@@@@            \\n                %@@@@@@@@@:+@@@         @@           \\n                *@@@@@@@@@@@@@   @@@@@       @.      \\n                 @@@@@@@@@@@@@@@@@@@@@        @@     \\n                 @@@@@@@.   @@@@   @@@@        @@    \\n         @@@@@@@@@@@@@    @@@@      =@@.  @@@   @=   \\n       @@@@@@@@@@@@@      #*@.:@@@        :@@    @%  \\n      :@@@@@@@@@@@@@         -@@@@ @              @  \\n      @@@@@@@@@@@@:            . .                @@ \\n     @@@@@@@@@@@@@                       .@@@@@@  #@ \\n    @@@@@@@@@@@@@@                       @@@@@@@:  @ \\n   .@@@@@@@@@@@@@@@                       @@@@@@   @#\\n   #@@@@@@@@@@@@@@@@                      @@@@@.   @=\\n   @@@@@@@@@  .@@@@@@.             @@@@%@@@@@@@@  @@ \\n  @@@@@@@@@@@   @@@@@@@               @@@@@@@@   .@= \\n@@@@@@@@@@@@@@    @@@@@@@                        @:  \\n@@@@@@@@@@@@@@@     @@@@@@@    @@             %@@    \\n@@@@@@@@ :@@@@@@@     @@@@@@@.    @@@@.   .@@@@@@    \\n-@@@@@@@   @@@@@@@@      @@@@@@@    .@@@@@@@@@@@@@   \\n @@@@@@@@    @@@@@@@@.      @@@@@@%     ..@@@@@@@@   \\n  @@@@@@@@@      @@@@@@@@@.     @@@@@@@               \\n @@@@@@@@@@@       @@@@@@@@@@.     @@@@@@@.          \\n@@@@@@@@@@@@@@              @@@@@@     .@@@@@@@      \\n@@@@@@  @@@@@@@                               @@@@@@%\\n @@@@@.   @@@@@:    @@@@@@@.                         \\n  .@@@@#      @@@@     %@@@@@@                       \\n    @@@@@@         @@@                               \\n     @@@@@@@@@+                                      \\n     @@@@.@@@@@                                      \\n      @@@@.  -@@@@@.                                  \\n        @@@@@                                        \\n          @@@@@@@.                                   \\n            .@@@@@@@@@                              \\n                :@@@@-                              \\n                   @@@@                             \\n                 @@@@                               \\n                  @@@@                              \\n                   @@@                              \\n                 @@@                                ',
-            'Printer': '\\n                          -##############################################-                           \\n                          +.                                            .=                           \\n                            +.  :-     .         #=.             .-: ..+                            \\n                            *.  :-               --#.             -:  .*                            \\n                            *.  :-               .+.+             -:  .+                            \\n                            *.  :-          .*@@@@%@@@@:          -:  .+                            \\n                            *.  :-          =++.-+#=.#.#          -:  .+                            \\n                            *.  :#**********#+.-.=*-.::%*********+*:  .+                            \\n                            *.  :*==========*+.::+=:-=:%==========*:  .+                            \\n                            *.  :-          =+.:+:.-=..#          -:  .+                            \\n                            *.  :-          =%++++++++**          =:  .+                            \\n                            *.  :-             =...:+  .          =:  .+                            \\n                            *.  :-            ..*..=:.            =:  .+                            \\n                            *.  :-             ..%@..             =:  .+                            \\n                            *.  :-                                =:  .+                            \\n                            *.  :-                                =:  .+                            \\n                            *.  :-                                =:  .+                            \\n                            *.  :-                                =:  .+                            \\n                            *.  :-                                =:  .+                            \\n                            *.  :-                                =:  .+                            \\n                            *.  :-*%%%@@@@@@@@@@@@@@@@@@@@@%%%%%#==:  .+                            \\n                            *.  --#.                       .    .+=:  .+                            \\n                            *.  ---===*+%==================*+@=--.=:  .+                            \\n                            *:::==::::=-%::::::::::::::::::+-@::::=-:::+                            \\n                          .*.      .*.                  ..    .*       .#.                           \\n                          @.       .*  =:.           -. %..%: .#        .%                           \\n                         =-        .#. =-............=..#+-@. .#         =-.                         \\n                        .@         .*                         .#          @.                         \\n                        -#####################################*#***********-                         ',
-            'Revolver': '      .____.                                       \\n   xuuu```$$$uuu.                                      \\n . $``$  $$$`$$$                                      \\ndP*$  $  $$$ $$$                                      \\n?k $  $  $$$ $$$                                      \\n $ $  $  $$$ $$$                                      \\n ":$  $  $$$ $$$                                      \\n  N$  $  $$$ $$$                                      \\n  $$  $  $$$ $$$                                      \\n   $  $  $$$ $$$                                      \\n   $  $  $$$ $$$                                      \\n   $  $  $$$ $$$                                      \\n   $  $  $$$ $$$                                      \\n   $  $  $$$ $$$                                      \\n   $$#$  $$$ $$$                                      \\n   $$\'$  $$$ $$$                                      \\n   $$`R  $$$ $$$                                      \\n   $$$&  $$$ $$$                                      \\n   $#*$  $$$ $$$                                      \\n   $  $  $$$ @$$                                      \\n   $  $  $$$ $$$                                      \\n   $  $  $$$ $$$                                      \\n   $  $  $B$ $$&.                                     \\n   $  $  $D$ $$$$$muL.                                 \\n   $  $  $Q$ $$$$$  `"**mu..                           \\n   $  $  $R$ $$$$$    k  `$$*t                           \\n   $  @  $$$ $$$$$    k   $$!4                           \\n   $ x$uu@B8u$NB@$uuuu6...$$X?                           \\n   $ $(`RF`$`````R$ $$5`"""#"R                           \\n   $ $" M$ $     $$ $$$      ?                           \\n   $ $  ?$ $     T$ $$$      $                           \\n   $ $F H$ $     M$ $$K      $  ..                       \\n   $ $L $$ $     $$ $$R.     "d$$$$Ns.                   \\n   $ $~ $$ $     N$ $$X      ."    "%2h                   \\n   $ 4k f  $     *$ $$&      R       "iN                   \\n   $ $$ %uz!     tuuR$$:     Buu      ?`:                   \\n   $ $F          $??$8B      | \'*Ned*$~L$                   \\n   $ $k          $\'@$$$      |$.suu+!\' !$                   \\n   $ ?N          $\'$$@$      $*`      d:"                  \\n   $ dL..........M.$&$$      5       d"P                  \\n ..$.^"*I$RR*$C""??77*?      "nu...n*L*                  \\n\'$C"R   ```""!$*@#""` .uor    bu8BUU+!`                  \\n\'*@m@.       *d"     *$Rouxxd"`` `$                  \\n     R*@mu.           "#$R *$    !                       \\n     *%x. "*L               $     %.                       \\n        "N  `%.      ...u.d!` ..ue$$$o..                   \\n         @    ".    $*"""" .u$$$$$$$$$$$$beu...           \\n        8  .mL %  :R`     x$$$$$$$$$$$$$$$$$$$$$$$$$$WmeemeeWc      \\n       |$e!" "s:k 4      d$N"`"#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \\n       $$      "N @      $?$    F$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \\n       $@       ^%Uu..   R#8buu$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \\n                  ```""*u$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \\n                         #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \\n                          "5$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \\n                            `*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \\n                              ^#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>     \\n                                 "*$$$$$$$$$$$$$$$$$$$$$$$$$$>     \\n                                   `"*$$$$$$$$$$$$$$$$$$$$$$$>     \\n                                       ^!$$$$$$$$$$$$$$$$$$$$>     \\n                                           `"#+$$$$$$$$$$$$$$>     \\n                                                 """**$$$$$$$$>     \\n                                                        ```""      '
-        };
-
+        // ASCII art storage
+        var asciiArtCache = {};
         var currentAsciiArt = '';
+        var currentAsciiArtName = '';
 
         // Initialize the app
         function initApp() {
-            populateAsciiDropdown();
-            setupEventListeners();
-            generateReadme();
+            loadAsciiArtFiles();
+        }
+
+        // Load ASCII art files dynamically
+        function loadAsciiArtFiles() {
+            var statusDiv = document.getElementById('asciiArtStatus');
+            var select = document.getElementById('asciiArt');
+            
+            statusDiv.textContent = 'Loading ASCII art files...';
+            
+            // First try to load from the index file
+            fetch('ascii/art-index.json')
+                .then(function(response) {
+                    if (!response.ok) {
+                        throw new Error('Could not load art index file');
+                    }
+                    return response.json();
+                })
+                .then(function(files) {
+                    statusDiv.textContent = 'Found ' + files.length + ' ASCII art files. Loading content...';
+                    return Promise.all(files.map(function(file) {
+                        return loadAsciiArtFile(file);
+                    }));
+                })
+                .then(function() {
+                    populateAsciiDropdown();
+                    setupEventListeners();
+                    generateReadme();
+                    statusDiv.textContent = 'ASCII art loaded successfully!';
+                    setTimeout(function() {
+                        statusDiv.textContent = '';
+                    }, 2000);
+                })
+                .catch(function(error) {
+                    statusDiv.className = 'error-message';
+                    statusDiv.textContent = 'Error loading ASCII art: ' + error.message + '. Please make sure the files exist in the ascii directory.';
+                    console.error('Error loading ASCII art:', error);
+                });
+        }
+
+        // Load individual ASCII art file
+        function loadAsciiArtFile(filename) {
+            return fetch('ascii/' + filename)
+                .then(function(response) {
+                    if (!response.ok) {
+                        throw new Error('Could not load file: ' + filename);
+                    }
+                    return response.text();
+                })
+                .then(function(content) {
+                    var name = filename.replace('.txt', '').replace(/-/g, ' ').replace(/_/g, ' ');
+                    asciiArtCache[name] = content;
+                    console.log('Loaded ASCII art:', name);
+                    return name;
+                });
         }
 
         // Populate ASCII art dropdown
         function populateAsciiDropdown() {
             var select = document.getElementById('asciiArt');
-            if (!select) return;
-            
             select.innerHTML = '';
             
-            // Options: Ascii dogenado first, then others
-            var options = ['Ascii dogenado', 'Printer', 'Revolver'];
+            var options = Object.keys(asciiArtCache);
+            options.sort();
+            
+            // Move "ascii dogenado" to the front if it exists
+            var dogenadoIndex = options.indexOf('ascii dogenado');
+            if (dogenadoIndex > -1) {
+                var dogenado = options.splice(dogenadoIndex, 1)[0];
+                options.unshift(dogenado);
+            }
             
             for (var i = 0; i < options.length; i++) {
                 var option = document.createElement('option');
@@ -175,9 +244,11 @@
                 select.appendChild(option);
             }
             
-            // Select Ascii dogenado by default
-            select.value = 'Ascii dogenado';
-            currentAsciiArt = ASCII_ART_OPTIONS['Ascii dogenado'];
+            if (options.length > 0) {
+                select.value = options[0];
+                currentAsciiArtName = options[0];
+                currentAsciiArt = asciiArtCache[options[0]];
+            }
         }
 
         // Set up event listeners
@@ -186,7 +257,9 @@
             var asciiSelect = document.getElementById('asciiArt');
             if (asciiSelect) {
                 asciiSelect.addEventListener('change', function() {
-                    currentAsciiArt = ASCII_ART_OPTIONS[this.value];
+                    currentAsciiArtName = this.value;
+                    currentAsciiArt = asciiArtCache[this.value];
+                    console.log('Selected ASCII art:', currentAsciiArtName);
                     generateReadme();
                 });
             }

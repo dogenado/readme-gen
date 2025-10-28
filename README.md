@@ -4,7 +4,7 @@ A GitHub Pages compatible web application for generating README files for sharin
 
 ## Features
 
-- **ASCII Art Selector**: Choose from multiple ASCII art headers from the `ascii/` folder
+- **Dynamic ASCII Art Loading**: Automatically loads all `.txt` files from the `ascii/` directory
 - **Main Section**: Title, description, and version fields with decorative border around text
 - **Release Notes**: Dynamic section where you can add or remove release note lines
 - **Credits Section**: Multiple developer support with dogenado as the default main developer
@@ -50,22 +50,44 @@ readme-gen/
 
 ## Adding New ASCII Art
 
-To add new ASCII art options:
+Adding your own ASCII art is now extremely easy:
 
-1. Create a new `.txt` file in the `ascii/` directory (e.g., `new-art.txt`)
-2. Add the filename to `ascii/art-index.json`:
+### Method 1: Just Add Files (Recommended)
+1. Create a new `.txt` file in the `ascii/` directory (e.g., `my-cool-art.txt`)
+2. Add your ASCII art content to the file
+3. Refresh the web page - your new art will automatically appear!
+
+### Method 2: Update Index File (Optional)
+If you need custom ordering or want to exclude certain files:
+1. Edit `ascii/art-index.json` to list your files:
    ```json
    [
      "ascii-dogenado.txt",
-     "new-art.txt"
+     "my-awesome-art.txt", 
+     "printer.txt",
+     "revolver.txt"
    ]
    ```
-3. The app will automatically detect and load the new ASCII art
 
-**File naming convention:**
+### File Naming Conventions
 - Use lowercase letters, numbers, hyphens (-), or underscores (_)
-- Hyphens and underscores will be converted to spaces in the dropdown menu
-- Example: `cool-dragon.txt` becomes "Cool dragon" in the selector
+- File names will be converted to readable names in the dropdown:
+  - `my-cool-art.txt` → `my cool art`
+  - `new_dragon.txt` → `new dragon`
+- `.txt` extension is required
+
+### Examples
+- `spaceship.txt` - Space-themed ASCII art
+- `mountains.txt` - Mountain landscape ASCII art  
+- `cyber-punk.txt` - Cyberpunk style ASCII art
+- `company-logo.txt` - Your company logo in ASCII
+
+### Troubleshooting
+- **File not showing up?** Make sure it has a `.txt` extension
+- **Art not loading?** Check the browser console for any file loading errors
+- **Want to remove art?** Just delete the `.txt` file or remove it from `art-index.json`
+
+The system automatically detects and loads all ASCII art files, making it incredibly simple to customize!
 
 ## Customization
 
