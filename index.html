@@ -60,8 +60,11 @@
             color: #fff;
             padding: 15px;
             border: 1px solid #333;
-            white-space: pre-wrap;
             font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.2;
+            white-space: pre;
+            overflow-x: auto;
             height: 80vh;
             overflow-y: auto;
         }
@@ -200,9 +203,35 @@
                 })
                 .catch(function(error) {
                     statusDiv.className = 'error-message';
-                    statusDiv.textContent = 'Error loading ASCII art: ' + error.message + '. Please make sure the files exist in the ascii directory.';
+                    
+                    // Check if this is likely a CORS/local file issue
+                    if (error.message.includes('fetch') || error.message.includes('NetworkError')) {
+                        statusDiv.textContent = 'Network error loading files. This happens when opening files directly. Please use a local server or deploy to GitHub Pages.';
+                    } else {
+                        statusDiv.textContent = 'Error loading ASCII art: ' + error.message + '. Please make sure the files exist in the ascii directory.';
+                    }
                     console.error('Error loading ASCII art:', error);
+                    
+                    // Fallback to embedded example art for testing
+                    loadFallbackArt();
                 });
+        }
+
+        // Fallback art for testing when files can't be loaded
+        function loadFallbackArt() {
+            var statusDiv = document.getElementById('asciiArtStatus');
+            statusDiv.className = 'success-message';
+            statusDiv.textContent = 'Loading fallback ASCII art for demo purposes...';
+            
+            asciiArtCache = {
+                'Demo ASCII Art': '   ###    ###   ######   #######   ######   #######  \n  ## ##   ## ##  ##   ##  ##     ## ##   ##  ##     ## \n ##   ## ##   ## ##   ##  ##     ## ##    ## ##     ## \n##     ## ##     ## ######   ##     ## ##       ##     ## \n######### ######### ##   ##  ##     ## ##       ######### \n##     ## ##     ## ##   ##  ##     ## ##    ## ##     ## \n##     ## ##     ## ##   ##  ##     ## ##   ##  ##     ## \n##     ## ##     ## ######    #######   ######    #######  '
+            };
+            
+            populateAsciiDropdown();
+            setupEventListeners();
+            generateReadme();
+            
+            statusDiv.textContent = 'Demo mode loaded. Add ASCII art files to ascii/ directory for full functionality.';
         }
 
         // Load individual ASCII art file
@@ -215,9 +244,13 @@
                     return response.text();
                 })
                 .then(function(content) {
+                    // Normalize line endings and remove trailing spaces
+                    content = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+                    content = content.replace(/[ \t]+$/gm, '');
+                    
                     var name = filename.replace('.txt', '').replace(/-/g, ' ').replace(/_/g, ' ');
                     asciiArtCache[name] = content;
-                    console.log('Loaded ASCII art:', name);
+                    console.log('Loaded ASCII art:', name, 'with', content.split('\n').length, 'lines');
                     return name;
                 });
         }
