@@ -1,6 +1,51 @@
 // ASCII art cache
-let asciiArtCache = {
-    'Ascii dogenado': `                  @                    @%            
+let asciiArtCache = {};
+let currentAsciiArt = '';
+
+// Load available ASCII art files from ascii directory
+async function loadAsciiArtFiles() {
+    const select = document.getElementById('asciiArt');
+    select.innerHTML = '<option value="">Loading...</option>';
+    
+    // Try to load ASCII art files from the index
+    try {
+        const indexResponse = await fetch('ascii/art-index.json');
+        
+        if (indexResponse.ok) {
+            const asciiFiles = await indexResponse.json();
+            
+            // Clear previous cache and populate with files from index
+            asciiArtCache = {};
+            
+            for (const file of asciiFiles) {
+                try {
+                    const response = await fetch(`ascii/${file}`);
+                    if (response.ok) {
+                        const art = await response.text();
+                        const fileName = file.replace('.txt', '').replace(/-/g, ' ').replace(/_/g, ' ');
+                        
+                        // Store in cache - this will overwrite any existing entry
+                        asciiArtCache[fileName] = art;
+                    }
+                } catch (error) {
+                    console.warn(`Failed to load ${file}:`, error);
+                }
+            }
+        }
+    } catch (error) {
+        console.warn('Could not load ASCII art index:', error);
+        // Fallback to embedded art if index loading fails
+        loadEmbeddedArt();
+    }
+    
+    // Populate dropdown with unique entries from cache
+    populateDropdown();
+}
+
+function loadEmbeddedArt() {
+    // Fallback embedded art
+    asciiArtCache = {
+        'Ascii dogenado': `                  @                    @%            
                  @@@@                 @@@            
                 :@@@@@@@            :@@@@            
                 %@@@@@@@@@:+@@+         @@           
@@ -41,60 +86,25 @@ let asciiArtCache = {
                   @@@@                               
                    @@@                               
                  @@@                                 `
-};
-let currentAsciiArt = '';
+    };
+}
 
-// Load available ASCII art files from ascii directory
-async function loadAsciiArtFiles() {
+function populateDropdown() {
     const select = document.getElementById('asciiArt');
     select.innerHTML = '';
     
-    // First, populate with embedded ASCII art
-    for (const [name, art] of Object.entries(asciiArtCache)) {
+    // Sort keys alphabetically for consistent ordering
+    const sortedNames = Object.keys(asciiArtCache).sort();
+    
+    for (const name of sortedNames) {
         const option = document.createElement('option');
         option.value = name;
-        option.textContent = name;
+        option.textContent = name.charAt(0).toUpperCase() + name.slice(1);
         select.appendChild(option);
     }
     
-    // Try to load additional ASCII art files (works on GitHub Pages but not when opened as file://)
-    try {
-        const indexResponse = await fetch('ascii/art-index.json');
-        
-        if (indexResponse.ok) {
-            const asciiFiles = await indexResponse.json();
-            
-            for (const file of asciiFiles) {
-                try {
-                    const response = await fetch(`ascii/${file}`);
-                    if (response.ok) {
-                        const art = await response.text();
-                        const fileName = file.replace('.txt', '').replace(/-/g, ' ').replace(/_/g, ' ');
-                        
-                        // Update existing cache entry or add new one
-                        asciiArtCache[fileName] = art;
-                        
-                        // Update or add option if not already present
-                        let option = Array.from(select.options).find(opt => opt.value === fileName);
-                        if (!option) {
-                            option = document.createElement('option');
-                            option.value = fileName;
-                            option.textContent = fileName.charAt(0).toUpperCase() + fileName.slice(1);
-                            select.appendChild(option);
-                        }
-                    }
-                } catch (error) {
-                    console.warn(`Failed to load ${file}:`, error);
-                }
-            }
-        }
-    } catch (error) {
-        console.warn('Could not load ASCII art index, using embedded art only:', error);
-    }
-    
-    // Set initial selection
-    if (select.options.length > 0) {
-        const firstOption = select.options[0].value;
+    if (sortedNames.length > 0) {
+        const firstOption = sortedNames[0];
         currentAsciiArt = asciiArtCache[firstOption];
         
         select.addEventListener('change', function() {
