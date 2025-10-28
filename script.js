@@ -1,44 +1,6 @@
-// ASCII art cache
-let asciiArtCache = {};
-let currentAsciiArt = '';
-let eventListenerAdded = false;
-
-// Load available ASCII art files from ascii directory
-async function loadAsciiArtFiles() {
-    const select = document.getElementById('asciiArt');
-    select.innerHTML = '<option value="">Loading...</option>';
-    
-    // Load embedded art first
-    loadEmbeddedArt();
-    
-    // Try to load external files
-    try {
-        const asciiFiles = ['ascii-dogenado.txt', 'printer.txt', 'revolver.txt'];
-        
-        for (const file of asciiFiles) {
-            try {
-                const response = await fetch(`ascii/${file}`);
-                if (response.ok) {
-                    const art = await response.text();
-                    const fileName = file.replace('.txt', '').replace(/-/g, ' ').replace(/_/g, ' ');
-                    asciiArtCache[fileName] = art;
-                    console.log(`Loaded external ASCII art: ${fileName}`);
-                }
-            } catch (error) {
-                console.warn(`Could not load ${file}, using embedded version`);
-            }
-        }
-    } catch (error) {
-        console.warn('Using embedded art only');
-    }
-    
-    // Populate dropdown
-    populateDropdown();
-}
-
-function loadEmbeddedArt() {
-    asciiArtCache = {
-        'Ascii dogenado': `                  @                    @%            
+// Simple ASCII art data - embedded directly to avoid any loading issues
+const ASCII_ART_OPTIONS = {
+    'Ascii dogenado': `                  @                    @%            
                  @@@@                 @@@            
                 :@@@@@@@            :@@@@            
                 %@@@@@@@@@:+@@+         @@           
@@ -79,7 +41,7 @@ function loadEmbeddedArt() {
                   @@@@                               
                    @@@                               
                  @@@                                 `,
-        'Printer': `                                                                                                    
+    'Printer': `                                                                                                    
                                                                                                     
                                                                                                     
                                                                                                     
@@ -136,7 +98,7 @@ function loadEmbeddedArt() {
                                                                                                     
                                                                                                     
                                                                  `,
-        'Revolver': `      .____.
+    'Revolver': `      .____.
    xuuu\`\`\$$$uuu.
  . \$\`\`\$  $$$\`$$$
 dP*$  $  $$$ $$$
@@ -187,10 +149,10 @@ dP*$  $  $$$ $$$
        |$e!" "s:k 4      d$N"\`"#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
        $$      "N @      $?$    F$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
        $@       ^%Uu..   R#8buu$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
-                  \`\`\`""*u$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>`
+                  \`\`\`""*u$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$**`
                          #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
-                          "5$$$$$$$$$$$$$$$$$$$$$$$$$$$>
-                            \`*$$$$$$$$$$$$$$$$$$$$$$$$>
+                          "5$$$$$$$$$$$$$$$$$$$$$$$$$$$$%>
+                            \`*$$$$$$$$$$$$$$$$$$$$$$$$****>
                               ^#$$$$$$$$$$$$$$$$$$$$$>
                                  "*$$$$$$$$$$$$$$$$$$>
                                    \`"*$$$$$$$$$$$$$$>
@@ -198,55 +160,55 @@ dP*$  $  $$$ $$$
                                            \`"#+$$$$$$>
                                                  """**$$>
                                                         \`\`\``
-    };
-}
+};
 
-function populateDropdown() {
+// Current selected ASCII art
+let currentAsciiArt = '';
+
+// Populate dropdown immediately
+function populateAsciiDropdown() {
     const select = document.getElementById('asciiArt');
     select.innerHTML = '';
     
-    const sortedNames = Object.keys(asciiArtCache).sort();
+    const options = Object.keys(ASCII_ART_OPTIONS).sort();
     
-    for (const name of sortedNames) {
+    options.forEach((name, index) => {
         const option = document.createElement('option');
         option.value = name;
-        option.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+        option.textContent = name;
         select.appendChild(option);
-    }
+    });
     
-    if (sortedNames.length > 0) {
-        const firstOption = sortedNames[0];
-        currentAsciiArt = asciiArtCache[firstOption];
-        
-        // Only add event listener once
-        if (!eventListenerAdded) {
-            select.addEventListener('change', function() {
-                currentAsciiArt = asciiArtCache[this.value];
-                generateReadme();
-            });
-            eventListenerAdded = true;
-        }
-        
+    // Select first option by default
+    if (options.length > 0) {
+        select.value = options[0];
+        currentAsciiArt = ASCII_ART_OPTIONS[options[0]];
         generateReadme();
-    } else {
-        select.innerHTML = '<option value="">No ASCII art available</option>';
     }
 }
 
-// DOM elements
+// Initialize the app
 document.addEventListener('DOMContentLoaded', function() {
+    // Populate ASCII art dropdown first
+    populateAsciiDropdown();
+    
+    // Get all DOM elements
     const titleInput = document.getElementById('title');
     const descriptionInput = document.getElementById('description');
     const versionInput = document.getElementById('version');
     const additionalThanksInput = document.getElementById('additionalThanks');
+    const asciiSelect = document.getElementById('asciiArt');
     const generateBtn = document.getElementById('generateReadme');
     const copyBtn = document.getElementById('copyToClipboard');
     const readmeOutput = document.getElementById('readmeOutput');
     const addReleaseNoteBtn = document.getElementById('addReleaseNote');
     const addDeveloperBtn = document.getElementById('addDeveloper');
 
-    // Load ASCII art files
-    loadAsciiArtFiles();
+    // ASCII art change handler
+    asciiSelect.addEventListener('change', function() {
+        currentAsciiArt = ASCII_ART_OPTIONS[this.value];
+        generateReadme();
+    });
 
     // Add release note line
     addReleaseNoteBtn.addEventListener('click', function() {
@@ -279,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Attach remove listeners to existing elements
     document.querySelectorAll('.remove-btn').forEach(button => {
         const item = button.closest('.release-note-item, .developer-item');
-        if (item.classList.contains('release-note-item')) {
+        if (item && item.classList.contains('release-note-item')) {
             attachRemoveNoteListener(button);
         } else {
             attachRemoveDeveloperListener(button);
@@ -309,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function attachRemoveNoteListener(button) {
     button.addEventListener('click', function() {
         const releaseNotesDiv = document.getElementById('releaseNotes');
-        if (releaseNotesDiv.children.length > 1) {
+        if (releaseNotesDiv && releaseNotesDiv.children.length > 1) {
             this.parentElement.remove();
             generateReadme();
         }
@@ -319,7 +281,7 @@ function attachRemoveNoteListener(button) {
 function attachRemoveDeveloperListener(button) {
     button.addEventListener('click', function() {
         const developersDiv = document.getElementById('developers');
-        if (developersDiv.children.length > 1) {
+        if (developersDiv && developersDiv.children.length > 1) {
             this.parentElement.remove();
             generateReadme();
         }
@@ -340,7 +302,11 @@ function createBorderBox(content) {
 }
 
 function generateReadme() {
-    if (!currentAsciiArt) return;
+    // Make sure we have ASCII art
+    if (!currentAsciiArt) {
+        const firstOption = Object.keys(ASCII_ART_OPTIONS)[0];
+        currentAsciiArt = ASCII_ART_OPTIONS[firstOption];
+    }
     
     const title = document.getElementById('title').value || 'Project Title';
     const description = document.getElementById('description').value || 'Project description goes here.';
@@ -392,5 +358,8 @@ Version: ${version}`;
     }
 
     // Display generated README
-    document.getElementById('readmeOutput').textContent = readme;
+    const readmeOutput = document.getElementById('readmeOutput');
+    if (readmeOutput) {
+        readmeOutput.textContent = readme;
+    }
 }
