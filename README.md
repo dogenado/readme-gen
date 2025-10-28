@@ -8,6 +8,7 @@ A GitHub Pages compatible web application for generating README files for sharin
 - **Main Section**: Title, description, and version fields with decorative border around text
 - **Release Notes**: Dynamic section where you can add or remove release note lines
 - **Credits Section**: Multiple developer support with dogenado as the default main developer
+- **Hardware Section**: Dynamic section for listing hardware components or specifications
 - **Additional Thanks**: Optional section for giving thanks to contributors
 
 ## Usage

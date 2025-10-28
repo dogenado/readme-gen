@@ -145,6 +145,17 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Hardware:</label>
+                    <div id="hardware">
+                        <div class="item">
+                            <input type="text" class="hardware-item" placeholder="Hardware component or specifications">
+                            <button onclick="removeItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button onclick="addHardware()">Add Hardware</button>
+                </div>
+
+                <div class="form-group">
                     <label for="additionalThanks">Additional Thanks:</label>
                     <textarea id="additionalThanks" placeholder="Enter additional thanks" rows="3"></textarea>
                 </div>
@@ -335,6 +346,20 @@
             }
         }
 
+        function addHardware() {
+            var container = document.getElementById('hardware');
+            var div = document.createElement('div');
+            div.className = 'item';
+            div.innerHTML = '<input type="text" class="hardware-item" placeholder="Hardware component or specifications"><button onclick="removeItem(this)">Remove</button>';
+            container.appendChild(div);
+            
+            // Add event listener to new input
+            var inputs = div.getElementsByTagName('input');
+            if (inputs.length > 0) {
+                inputs[0].addEventListener('input', generateReadme);
+            }
+        }
+
         function removeItem(button) {
             var parent = button.parentElement;
             var container = parent.parentElement;
@@ -387,6 +412,15 @@
                 }
             }
 
+            // Get hardware items
+            var hardwareItems = [];
+            var hardwareInputs = document.getElementsByClassName('hardware-item');
+            for (var i = 0; i < hardwareInputs.length; i++) {
+                if (hardwareInputs[i].value.trim()) {
+                    hardwareItems.push('• ' + hardwareInputs[i].value.trim());
+                }
+            }
+
             // Build README content
             var readme = currentAsciiArt + '\n\n';
 
@@ -404,6 +438,12 @@
             if (developers.length > 0) {
                 readme += '## Credits\n\n';
                 readme += developers.join('\n') + '\n\n';
+            }
+
+            // Hardware section
+            if (hardwareItems.length > 0) {
+                readme += '## Hardware\n\n';
+                readme += hardwareItems.join('\n') + '\n\n';
             }
 
             // Additional thanks section
