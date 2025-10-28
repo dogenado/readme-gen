@@ -1,50 +1,42 @@
 // ASCII art cache
 let asciiArtCache = {};
 let currentAsciiArt = '';
+let eventListenerAdded = false;
 
 // Load available ASCII art files from ascii directory
 async function loadAsciiArtFiles() {
     const select = document.getElementById('asciiArt');
     select.innerHTML = '<option value="">Loading...</option>';
     
-    // Start with embedded art as fallback
+    // Load embedded art first
     loadEmbeddedArt();
     
-    // Try to load and override with external ASCII art files
+    // Try to load external files
     try {
-        const indexResponse = await fetch('ascii/art-index.json');
+        const asciiFiles = ['ascii-dogenado.txt', 'printer.txt', 'revolver.txt'];
         
-        if (indexResponse.ok) {
-            const asciiFiles = await indexResponse.json();
-            
-            for (const file of asciiFiles) {
-                try {
-                    const response = await fetch(`ascii/${file}`);
-                    if (response.ok) {
-                        const art = await response.text();
-                        const fileName = file.replace('.txt', '').replace(/-/g, ' ').replace(/_/g, ' ');
-                        
-                        // Store in cache - this will override any existing embedded entry
-                        asciiArtCache[fileName] = art;
-                        console.log(`Loaded external ASCII art: ${fileName}`);
-                    }
-                } catch (error) {
-                    console.warn(`Failed to load ${file}:`, error);
+        for (const file of asciiFiles) {
+            try {
+                const response = await fetch(`ascii/${file}`);
+                if (response.ok) {
+                    const art = await response.text();
+                    const fileName = file.replace('.txt', '').replace(/-/g, ' ').replace(/_/g, ' ');
+                    asciiArtCache[fileName] = art;
+                    console.log(`Loaded external ASCII art: ${fileName}`);
                 }
+            } catch (error) {
+                console.warn(`Could not load ${file}, using embedded version`);
             }
-        } else {
-            console.warn('Could not load art-index.json, using embedded art only');
         }
     } catch (error) {
-        console.warn('Could not load ASCII art index, using embedded art only:', error);
+        console.warn('Using embedded art only');
     }
     
-    // Always populate dropdown (whether external files loaded or not)
+    // Populate dropdown
     populateDropdown();
 }
 
 function loadEmbeddedArt() {
-    // Fallback embedded art
     asciiArtCache = {
         'Ascii dogenado': `                  @                    @%            
                  @@@@                 @@@            
@@ -68,7 +60,7 @@ function loadEmbeddedArt() {
 @@@@@@@@ :@@@@@@@     @@@@@@@.    @@@@.   .@@@@@@    
 -@@@@@@@   @@@@@@@@      @@@@@@@    .@@@@@@@@@@@@@   
  @@@@@@@@    @@@@@@@@.      @@@@@@%     ..@@@@@@@@   
-  @@@@@@@@      @@@@@@@@@.     @@@@@@@               
+  @@@@@@@@@      @@@@@@@@@.     @@@@@@@               
  @@@@@@@@@@@       @@@@@@@@@@.     @@@@@@@.          
 @@@@@@@@@@@@@@              @@@@@@     .@@@@@@@      
 @@@@@@  @@@@@@@                               @@@@@@%
@@ -195,16 +187,16 @@ dP*$  $  $$$ $$$
        |$e!" "s:k 4      d$N"\`"#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
        $$      "N @      $?$    F$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
        $@       ^%Uu..   R#8buu$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
-                  \`\`\`""*u$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
-                         #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
-                          "5$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
-                            \`*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
-                              ^#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
-                                 "*$$$$$$$$$$$$$$$$$$$$$$$$$$>
-                                   \`"*$$$$$$$$$$$$$$$$$$$$$$$>
-                                       ^!$$$$$$$$$$$$$$$$$$$$>
-                                           \`"#+$$$$$$$$$$$$$$>
-                                                 """**$$$$$$$$>
+                  \`\`\`""*u$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>`
+                         #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$>
+                          "5$$$$$$$$$$$$$$$$$$$$$$$$$$$>
+                            \`*$$$$$$$$$$$$$$$$$$$$$$$$>
+                              ^#$$$$$$$$$$$$$$$$$$$$$>
+                                 "*$$$$$$$$$$$$$$$$$$>
+                                   \`"*$$$$$$$$$$$$$$>
+                                       ^!$$$$$$$$$$$>
+                                           \`"#+$$$$$$>
+                                                 """**$$>
                                                         \`\`\``
     };
 }
@@ -213,7 +205,6 @@ function populateDropdown() {
     const select = document.getElementById('asciiArt');
     select.innerHTML = '';
     
-    // Sort keys alphabetically for consistent ordering
     const sortedNames = Object.keys(asciiArtCache).sort();
     
     for (const name of sortedNames) {
@@ -227,10 +218,14 @@ function populateDropdown() {
         const firstOption = sortedNames[0];
         currentAsciiArt = asciiArtCache[firstOption];
         
-        select.addEventListener('change', function() {
-            currentAsciiArt = asciiArtCache[this.value];
-            generateReadme();
-        });
+        // Only add event listener once
+        if (!eventListenerAdded) {
+            select.addEventListener('change', function() {
+                currentAsciiArt = asciiArtCache[this.value];
+                generateReadme();
+            });
+            eventListenerAdded = true;
+        }
         
         generateReadme();
     } else {
