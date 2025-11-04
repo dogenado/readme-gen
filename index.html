@@ -123,6 +123,17 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Change Log:</label>
+                    <div id="changeLog">
+                        <div class="item">
+                            <input type="text" class="change-log-input" placeholder="Change log entry">
+                            <button onclick="removeItem(this)">Remove</button>
+                        </div>
+                    </div>
+                    <button onclick="addChangeLog()">Add Entry</button>
+                </div>
+
+                <div class="form-group">
                     <label>Release Notes:</label>
                     <div id="releaseNotes">
                         <div class="item">
@@ -318,6 +329,20 @@
             }
         }
 
+        function addChangeLog() {
+            var container = document.getElementById('changeLog');
+            var div = document.createElement('div');
+            div.className = 'item';
+            div.innerHTML = '<input type="text" class="change-log-input" placeholder="Change log entry"><button onclick="removeItem(this)">Remove</button>';
+            container.appendChild(div);
+            
+            // Add event listener to new input
+            var inputs = div.getElementsByTagName('input');
+            if (inputs.length > 0) {
+                inputs[0].addEventListener('input', generateReadme);
+            }
+        }
+
         function addReleaseNote() {
             var container = document.getElementById('releaseNotes');
             var div = document.createElement('div');
@@ -394,6 +419,15 @@
             var version = document.getElementById('version').value || '1.0.0';
             var additionalThanks = document.getElementById('additionalThanks').value;
 
+            // Get change log entries
+            var changeLogEntries = [];
+            var changeInputs = document.getElementsByClassName('change-log-input');
+            for (var i = 0; i < changeInputs.length; i++) {
+                if (changeInputs[i].value.trim()) {
+                    changeLogEntries.push('• ' + changeInputs[i].value.trim());
+                }
+            }
+
             // Get release notes
             var releaseNotes = [];
             var noteInputs = document.getElementsByClassName('release-note-input');
@@ -427,6 +461,12 @@
             // Main section with border
             var mainContent = 'Title: ' + title + '\nDescription: ' + description + '\nVersion: ' + version;
             readme += createBorderBox(mainContent) + '\n\n';
+
+            // Change log section
+            if (changeLogEntries.length > 0) {
+                readme += '## Change Log\n\n';
+                readme += changeLogEntries.join('\n') + '\n\n';
+            }
 
             // Release notes section
             if (releaseNotes.length > 0) {
